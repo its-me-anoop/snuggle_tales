@@ -1,9 +1,8 @@
-// story_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:snuggle_tales/Utils/footer.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
-/// The StoryScreen widget displays a generated story with a header image.
 class StoryScreen extends StatefulWidget {
   final String story;
   final String headerImage;
@@ -15,16 +14,59 @@ class StoryScreen extends StatefulWidget {
 }
 
 class StoryScreenState extends State<StoryScreen> {
-  // Controllers
   late ScrollController _scrollController;
+  late FlutterTts flutterTts;
+  bool isSpeaking = false;
 
   @override
   void initState() {
-    // Initialize scroll controllers
-    _scrollController = ScrollController();
-
     super.initState();
-    // Fetch image when the screen is initialized
+    _scrollController = ScrollController();
+    initTts();
+  }
+
+  void initTts() {
+    flutterTts = FlutterTts();
+
+    flutterTts.setStartHandler(() {
+      setState(() => isSpeaking = true);
+    });
+
+    flutterTts.setCompletionHandler(() {
+      setState(() => isSpeaking = false);
+    });
+
+    flutterTts.setErrorHandler((msg) {
+      setState(() => isSpeaking = false);
+      // Optionally handle TTS errors here
+    });
+  }
+
+  Future speak() async {
+    if (widget.story.isNotEmpty) {
+      await flutterTts.speak(widget.story);
+    }
+  }
+
+  Future stop() async {
+    await flutterTts.stop();
+    setState(() => isSpeaking = false);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    flutterTts.stop();
+    super.dispose();
+  }
+
+  TextStyle _dynamicTextStyle(BuildContext context) {
+    double baseFontSize = 18.0;
+    double scalingFactor = 0.05;
+    double scaledFontSize =
+        MediaQuery.of(context).textScaler.scale(baseFontSize) * scalingFactor;
+    return TextStyle(
+        fontSize: baseFontSize * scaledFontSize, color: Colors.white);
   }
 
   @override
@@ -36,7 +78,6 @@ class StoryScreenState extends State<StoryScreen> {
         child: CustomScrollView(
           controller: _scrollController,
           slivers: [
-            // App Bar with header image
             SliverAppBar(
               pinned: true,
               iconTheme: const IconThemeData(color: Colors.white),
@@ -45,9 +86,7 @@ class StoryScreenState extends State<StoryScreen> {
               backgroundColor: Colors.black,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
-                  (widget.story.split('\n\n')[0] == "")
-                      ? widget.story.split('\n\n')[1]
-                      : widget.story.split('\n\n')[0],
+                  widget.story.split('\n\n').first,
                   style: const TextStyle(
                     shadows: [Shadow(color: Colors.black, blurRadius: 10)],
                     fontWeight: FontWeight.bold,
@@ -55,24 +94,29 @@ class StoryScreenState extends State<StoryScreen> {
                 ),
                 background: Image.network(
                   widget.headerImage,
-                  isAntiAlias: true,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            // Story content
             SliverList(
               delegate: SliverChildListDelegate([
                 Padding(
                   padding: EdgeInsets.all(
-                    (MediaQuery.of(context).size.width) >= 800 ? 50.0 : 20,
-                  ),
+                      (MediaQuery.of(context).size.width) >= 800 ? 50.0 : 20),
                   child: Text(
                     widget.story,
-                    style: const TextStyle(fontSize: 18.0, color: Colors.white),
+                    style: _dynamicTextStyle(context),
                   ),
                 ),
-                // Footer
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: isSpeaking ? stop : speak,
+                      child: Text(isSpeaking ? 'Stop Reading' : 'Read Aloud'),
+                    ),
+                  ),
+                ),
                 const Footer(),
               ]),
             ),
