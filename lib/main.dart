@@ -1,14 +1,14 @@
 // Importing necessary packages
 import 'package:flutter/material.dart';
-import 'package:snuggle_tales/privacy_policy.dart';
-import 'create_story_screen.dart';
+import 'package:snuggle_tales/screens/privacy_policy.dart';
+import 'screens/create_story_screen.dart';
 
 // Main entry point of the application
 void main() {
   runApp(const MyApp());
 }
 
-// Root widget of the application
+/// The main application widget that sets up the MaterialApp.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -17,9 +17,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // App configuration
       title: 'Bedtime Story App',
+
+      // Theme configuration
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
+
+      // Initial route and route definitions
       initialRoute: '/',
       routes: {
         '/': (context) => const CreateStoryScreen(),
