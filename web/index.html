@@ -41,8 +41,31 @@
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+  <style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: white;
+        background-color: black;
+    }
+
+    img {
+        border-radius: 20px;
+    }
+    h1 {
+      text-align: center; /* Center-align the heading */
+  }
+</style>
 </head>
 <body>
+  <div>
+    <img src="icons/Icon-512.png" alt="Icon">
+    <br>
+    <h1>Snuggle Tales</h1>
+</div>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

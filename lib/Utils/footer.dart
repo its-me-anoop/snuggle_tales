@@ -1,5 +1,7 @@
+// footer.dart
 import 'package:flutter/material.dart';
 
+/// The Footer widget displays a link to the privacy policy.
 class Footer extends StatelessWidget {
   const Footer({super.key});
 

@@ -3,16 +3,19 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:snuggle_tales/secrets/api_key.dart';
 
+// Constants for API
+const String openApiBaseUrl = 'https://api.openai.com/v1/';
+const Map<String, String> openApiHeaders = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer $openApiKey',
+};
+
 // Function to get a response from the ChatGPT model
 Future<String> getChatGPTResponse(String userMessage) async {
   try {
-    // Make a POST request to the OpenAI ChatGPT API
     final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/completions'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $openApiKey',
-      },
+      Uri.parse('${openApiBaseUrl}completions'),
+      headers: openApiHeaders,
       body: jsonEncode({
         'model': 'gpt-3.5-turbo-instruct',
         'max_tokens': 500,
@@ -32,12 +35,13 @@ Future<String> getChatGPTResponse(String userMessage) async {
     } else {
       // Handle failure to load response (non-200 status code)
       if (kDebugMode) {
-        print('Failed to load response. Status code: ${response.statusCode}');
+        print(
+            'Failed to load ChatGPT response. Status code: ${response.statusCode}');
       }
       if (kDebugMode) {
         print('Response body: ${response.body}');
       }
-      throw Exception('Failed to load response');
+      throw Exception('Failed to load ChatGPT response');
     }
   } catch (e) {
     // Handle general errors
@@ -51,11 +55,8 @@ Future<String> getChatGPTResponse(String userMessage) async {
 Future<String> getImageResponse(String query) async {
   try {
     final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/images/generations'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $openApiKey',
-      },
+      Uri.parse('${openApiBaseUrl}images/generations'),
+      headers: openApiHeaders,
       body: jsonEncode({
         'model': 'dall-e-3',
         'n': 1,

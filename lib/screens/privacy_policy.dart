@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
+/// The PrivacyPolicy widget that displays the privacy policy of the Snuggle Tales app.
 class PrivacyPolicy extends StatefulWidget {
   const PrivacyPolicy({super.key});
 
@@ -15,7 +16,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
 
   @override
   void initState() {
-    // initialize scroll controllers
+    // Initialize scroll controllers
     _scrollController = ScrollController();
 
     super.initState();
@@ -24,13 +25,21 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          'Privacy Policy',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       backgroundColor: Colors.black,
       body: WebSmoothScroll(
         controller: _scrollController,
         child: SingleChildScrollView(
           controller: _scrollController,
           child: const Padding(
-            padding: EdgeInsets.all(30.0),
+            padding: EdgeInsets.all(50.0),
             child: HtmlWidget(
               '''
               <body>

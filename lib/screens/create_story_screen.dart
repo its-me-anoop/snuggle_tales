@@ -9,6 +9,7 @@ import 'package:snuggle_tales/Utils/warning.dart';
 import 'package:snuggle_tales/screens/story_screen.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
+/// The CreateStoryScreen widget where users can create a story.
 class CreateStoryScreen extends StatefulWidget {
   const CreateStoryScreen({super.key});
 
@@ -19,6 +20,7 @@ class CreateStoryScreen extends StatefulWidget {
 class CreateStoryScreenState extends State<CreateStoryScreen> {
   List<String> messages = [];
   bool loading = false;
+
   // Controllers
   late ScrollController _scrollController;
 
@@ -69,6 +71,7 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Age Slider
                           Text(
                             'Select Child\'s Age: ${selectedAge.toInt()} years',
                             style: const TextStyle(color: Colors.white),
@@ -89,6 +92,7 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                             label: selectedAge.toInt().toString(),
                           ),
                           const SizedBox(height: 10.0),
+                          // Theme Dropdown
                           Row(
                             children: [
                               const Text(
@@ -135,6 +139,7 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                             ],
                           ),
                           const SizedBox(height: 10.0),
+                          // Characters Input Field
                           TextField(
                             style: TextStyle(
                                 color: Colors.amber[900],
@@ -162,6 +167,7 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                               });
                             },
                           ),
+                          // Create Story Button
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: ElevatedButton(
@@ -191,6 +197,7 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
     );
   }
 
+  /// Generates and displays a story based on user input.
   void createStory() async {
     String compiledMessage =
         "Age ${selectedAge.toInt()} years using $charactersInput";
@@ -202,6 +209,7 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
     });
 
     try {
+      // Fetch response from ChatGPT and image response
       String response = await getChatGPTResponse(compiledMessage);
       String imageResponse = await getImageResponse(imageQuery);
 
@@ -210,13 +218,13 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
       });
 
       // Navigate to the StoryScreen with the generated story
-
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => StoryScreen(response, imageResponse)),
       );
     } catch (e) {
+      // Handle error while getting ChatGPT response
       if (kDebugMode) {
         print('Error getting ChatGPT response: $e');
       }
