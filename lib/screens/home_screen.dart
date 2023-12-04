@@ -45,12 +45,14 @@ class HomeScreen extends StatelessWidget {
           if (state is StoryLoadingState) {
             return const CircularProgressIndicator();
           } else if (state is StoriesLoadedState) {
+            //Categories section
             return ListView.builder(
               itemCount: categories.length,
               itemBuilder: (context, categoryIndex) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //Category Title
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 20.0, top: 30, bottom: 10),
@@ -68,6 +70,8 @@ class HomeScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             var data = state.stories[index].data()
                                 as Map<String, dynamic>;
+
+                            // Stories based on category
                             return Padding(
                               padding:
                                   EdgeInsets.only(left: (index == 0) ? 20 : 0),
