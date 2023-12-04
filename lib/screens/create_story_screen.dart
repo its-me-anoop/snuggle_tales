@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snuggle_tales/bloc/story_bloc.dart';
+import 'package:snuggle_tales/constants/categories.dart';
 import 'package:snuggle_tales/screens/story_screen.dart';
 import 'package:snuggle_tales/Utils/loader.dart';
 import 'package:snuggle_tales/Utils/footer.dart';
@@ -52,12 +53,6 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
           if (state is StoryLoadingState) {
             return const Loader();
           }
-
-          // Build your CreateStoryScreen UI here, replacing the
-          // 'Create Story' button onPressed with:
-          // BlocProvider.of<StoryBloc>(context).add(
-          //   StoryCreateEvent(selectedAge, selectedStoryType, charactersInput),
-          // );
 
           return WebSmoothScroll(
             controller: _scrollController,
@@ -128,18 +123,8 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                                   selectedStoryType = newValue!;
                                 });
                               },
-                              items: <String>[
-                                'Adventure',
-                                'Fantasy',
-                                'Mystery',
-                                'Fairy Tale',
-                                'Halloween',
-                                'Christmas',
-                                'Funny',
-                                'Outer Space',
-                                'Sci-fi',
-                                'Super Heroes'
-                              ].map<DropdownMenuItem<String>>((String value) {
+                              items: categories.map<DropdownMenuItem<String>>(
+                                  (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(
