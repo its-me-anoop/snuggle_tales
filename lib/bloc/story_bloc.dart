@@ -20,12 +20,11 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
   void _onCreateStory(StoryCreateEvent event, Emitter<StoryState> emit) async {
     emit(StoryLoadingState());
     try {
-      String compiledMessage =
-          "Age ${event.age.toInt()} years using ${event.characters}";
-      String imageQuery = '${event.characters} ${event.storyType}';
+      String compiledMessage = "using ${event.characters}";
 
       String response = await getChatGPTResponse(compiledMessage);
-      String dalleImageResponse = await getImageResponse(imageQuery);
+      String dalleImageResponse =
+          await getImageResponse(response.split('\n\n').first);
 
       // Decode the base64 image string to bytes
       Uint8List imageData = base64Decode(dalleImageResponse);
@@ -40,7 +39,6 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
 
         // Save story details to Firestore with the new image URL
         await firestore.collection('stories').add({
-          'age': event.age,
           'storyType': event.storyType,
           'characters': event.characters,
           'storyContent': response,

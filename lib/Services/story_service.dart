@@ -14,13 +14,19 @@ const Map<String, String> openApiHeaders = {
 Future<String> getChatGPTResponse(String userMessage) async {
   try {
     final response = await http.post(
-      Uri.parse('${openApiBaseUrl}completions'),
+      Uri.parse("${openApiBaseUrl}chat/completions"),
       headers: openApiHeaders,
       body: jsonEncode({
-        'model': 'gpt-3.5-turbo-instruct',
+        'model': 'gpt-3.5-turbo',
         'max_tokens': 500,
-        'prompt':
-            "Short bed time story less than 200 words for children. $userMessage. no index. use paragraphs. add a title, but don't use the text Title:",
+        'messages': [
+          {"role": "system", "content": "You are a storyteller for children"},
+          {
+            "role": "user",
+            "content":
+                "Short bed time story less than 200 words for children. $userMessage. no index. use paragraphs. add a title, but don't use the text Title:"
+          },
+        ],
       }),
     );
 
@@ -30,7 +36,7 @@ Future<String> getChatGPTResponse(String userMessage) async {
         print(response.body);
       }
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final String story = data['choices'][0]['text'];
+      final String story = data['choices'][0]['message']['content'];
       return story;
     } else {
       // Handle failure to load response (non-200 status code)
@@ -69,7 +75,7 @@ Future<String> getImageResponse(String query) async {
     // Check if the request was successful (status code 200)
     if (response.statusCode == 200) {
       if (kDebugMode) {
-        print(response.body);
+        print("image generated successfully");
       }
       final Map<String, dynamic> data = jsonDecode(response.body);
       return data['data'][0]['b64_json'];

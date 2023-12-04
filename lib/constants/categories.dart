@@ -1,12 +1,8 @@
 const List<String> categories = [
-  'Adventure',
+  'Babies and Toddlers',
+  'Educational',
+  'Fairy Tales',
   'Fantasy',
-  'Mystery',
-  'Fairy Tale',
-  'Halloween',
-  'Christmas',
-  'Funny',
-  'Outer Space',
-  'Sci-fi',
-  'Super Heroes'
+  'Historical Fiction',
+  'Realistic Fiction'
 ];

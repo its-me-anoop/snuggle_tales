@@ -18,8 +18,8 @@ class CreateStoryScreen extends StatefulWidget {
 class CreateStoryScreenState extends State<CreateStoryScreen> {
   late ScrollController _scrollController;
   double selectedAge = 3.0;
-  String selectedStoryType = 'Adventure';
-  String charactersInput = 'Teddy bear, space ship, fairy tale planet';
+  late String selectedStoryType = categories[0];
+  String charactersInput = 'story from the bible';
 
   @override
   void initState() {
@@ -81,32 +81,10 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Age Slider
-                        Text(
-                          'Select Child\'s Age: ${selectedAge.toInt()} years',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        Slider(
-                          thumbColor: Colors.amber[900],
-                          activeColor: Colors.amber[600],
-                          inactiveColor: Colors.amber[200],
-                          value: selectedAge,
-                          onChanged: (double value) {
-                            setState(() {
-                              selectedAge = value;
-                            });
-                          },
-                          min: 0.0,
-                          max: 13.0,
-                          divisions: 13,
-                          label: selectedAge.toInt().toString(),
-                        ),
-                        const SizedBox(height: 10.0),
-                        // Theme Dropdown
                         Row(
                           children: [
                             const Text(
-                              'Theme:',
+                              'Category:',
                               style: TextStyle(color: Colors.white),
                             ),
                             const SizedBox(
@@ -179,8 +157,8 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                                     (states) => Colors.amber)),
                             onPressed: () {
                               BlocProvider.of<StoryBloc>(context).add(
-                                StoryCreateEvent(selectedAge, selectedStoryType,
-                                    charactersInput),
+                                StoryCreateEvent(
+                                    selectedStoryType, charactersInput),
                               );
                             },
                             child: const Text('Create Story'),
