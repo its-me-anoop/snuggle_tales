@@ -20,8 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Snuggle Tales',
+      debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (context) => StoryBloc(),
+        create: (context) => StoryBloc()..add(FetchStoriesEvent()),
         child: const HomeScreen(),
       ),
     );

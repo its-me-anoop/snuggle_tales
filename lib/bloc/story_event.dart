@@ -15,3 +15,5 @@ class StoryCreateEvent extends StoryEvent {
   @override
   List<Object> get props => [age, storyType, characters];
 }
+
+class FetchStoriesEvent extends StoryEvent {}

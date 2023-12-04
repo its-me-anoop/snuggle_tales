@@ -19,4 +19,13 @@ class StoryLoadedState extends StoryState {
   List<Object> get props => [storyContent, imageUrl];
 }
 
+class StoriesLoadedState extends StoryState {
+  final List<DocumentSnapshot> stories;
+
+  StoriesLoadedState(this.stories);
+
+  @override
+  List<Object> get props => [stories];
+}
+
 class StoryErrorState extends StoryState {}

@@ -61,7 +61,7 @@ Future<String> getImageResponse(String query) async {
         'model': 'dall-e-3',
         'n': 1,
         'style': 'vivid',
-        'response_format': 'url',
+        'response_format': 'b64_json',
         'prompt': query,
       }),
     );
@@ -72,7 +72,7 @@ Future<String> getImageResponse(String query) async {
         print(response.body);
       }
       final Map<String, dynamic> data = jsonDecode(response.body);
-      return data['data'][0]['url'];
+      return data['data'][0]['b64_json'];
     } else {
       // Handle failure to load response (non-200 status code)
       if (kDebugMode) {
