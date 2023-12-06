@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Snuggle Tales',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(useMaterial3: true),
       home: BlocProvider(
         create: (context) => StoryBloc()..add(FetchStoriesEvent()),
         child: const HomeScreen(),

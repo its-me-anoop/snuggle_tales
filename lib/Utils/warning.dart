@@ -8,12 +8,14 @@ class Warning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Text(
-          "While AI is powerful, errors may occur. Verify essential information independently.",
-          style: TextStyle(color: Colors.white),
+    return Center(
+      child: Container(
+        color: Colors.red[100],
+        child: const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+            "While AI is powerful, errors may occur. Verify essential information independently.",
+          ),
         ),
       ),
     );

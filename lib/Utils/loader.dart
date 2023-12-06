@@ -1,6 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 import 'package:snuggle_tales/Utils/warning.dart';
 
 /// A widget that displays a loading animation along with animated text messages.
@@ -14,26 +13,6 @@ class Loader extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Rive animation for the loader
-            SizedBox(
-              height: 400,
-              width: 400,
-              child: Stack(
-                children: [
-                  const RiveAnimation.asset('loader.riv'),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      color: Colors.black,
-                      height: 80,
-                      width: 200,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20), // Add some spacing
-
             // Animated text messages
             SizedBox(
               width: 400.0,
@@ -42,9 +21,9 @@ class Loader extends StatelessWidget {
                 child: DefaultTextStyle(
                   textAlign: TextAlign.center,
                   style: const TextStyle(
+                    color: Colors.black,
                     fontSize: 24.0, // Adjust font size
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
                   ),
                   child: AnimatedTextKit(
                     isRepeatingAnimation: true,

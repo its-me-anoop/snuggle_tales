@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:snuggle_tales/Utils/footer.dart';
-import 'package:snuggle_tales/bloc/story_bloc.dart';
-import 'package:snuggle_tales/screens/home_screen.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 class StoryScreen extends StatefulWidget {
@@ -69,97 +66,72 @@ class StoryScreenState extends State<StoryScreen> {
     double scaledFontSize =
         MediaQuery.of(context).textScaler.scale(baseFontSize) * scalingFactor;
     return TextStyle(
-        fontSize: baseFontSize * scaledFontSize, color: Colors.white);
+      fontSize: baseFontSize * scaledFontSize,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (didPop) {
-        if (didPop) {
-          // If the route was popped successfully, navigate to the HomeScreen
-          Future.delayed(Duration.zero, () {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                        create: (context) =>
-                            StoryBloc()..add(FetchStoriesEvent()),
-                        child: const HomeScreen(),
-                      )),
-              (Route<dynamic> route) => false,
-            );
-          });
-        } else {
-          // Handle the scenario where the pop was not successful if needed
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: WebSmoothScroll(
+    return Scaffold(
+      body: WebSmoothScroll(
+        controller: _scrollController,
+        child: CustomScrollView(
           controller: _scrollController,
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverAppBar(
-                leading: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Future.delayed(Duration.zero, () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                    create: (context) =>
-                                        StoryBloc()..add(FetchStoriesEvent()),
-                                    child: const HomeScreen(),
-                                  )),
-                          (Route<dynamic> route) => false,
-                        );
-                      });
-                    }),
-                pinned: true,
-                iconTheme: const IconThemeData(color: Colors.white),
-                elevation: 0,
-                expandedHeight: 400,
-                backgroundColor: Colors.black,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    widget.story.split('\n\n').first,
-                    style: const TextStyle(
-                      shadows: [Shadow(color: Colors.black, blurRadius: 10)],
-                      fontWeight: FontWeight.bold,
-                    ),
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              elevation: 0,
+              expandedHeight: 400,
+              leading: IconButton(
+                color: Colors.white,
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.black26)),
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  widget.story.split('\n\n').first,
+                  style: const TextStyle(
+                    shadows: [Shadow(color: Colors.black, blurRadius: 10)],
+                    fontWeight: FontWeight.bold,
                   ),
-                  background: Image.network(
+                ),
+                background: Hero(
+                  tag: widget.headerImage,
+                  child: Image.network(
                     widget.headerImage,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Padding(
-                    padding: EdgeInsets.all(
-                        (MediaQuery.of(context).size.width) >= 800 ? 50.0 : 20),
-                    child: Text(
-                      widget.story,
-                      style: _dynamicTextStyle(context),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Padding(
+                  padding: EdgeInsets.all(
+                      (MediaQuery.of(context).size.width) >= 800 ? 50.0 : 20),
+                  child: Text(
+                    widget.story,
+                    style: _dynamicTextStyle(context),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: isSpeaking ? stop : speak,
+                      child: Text(isSpeaking ? 'Stop Reading' : 'Read Aloud'),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: Center(
-                      child: ElevatedButton(
-                        onPressed: isSpeaking ? stop : speak,
-                        child: Text(isSpeaking ? 'Stop Reading' : 'Read Aloud'),
-                      ),
-                    ),
-                  ),
-                  const Footer(),
-                ]),
-              ),
-            ],
-          ),
+                ),
+                const Footer(),
+              ]),
+            ),
+          ],
         ),
       ),
     );

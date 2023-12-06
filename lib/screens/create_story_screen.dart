@@ -36,7 +36,6 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: BlocConsumer<StoryBloc, StoryState>(
         listener: (context, state) {
           if (state is StoryLoadedState) {
@@ -59,20 +58,6 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
             child: ListView(
               controller: _scrollController,
               children: [
-                //Header Image
-                SizedBox(
-                  height: 400,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.asset(
-                        'header.png',
-                        height: 400,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
                 // Options Section
                 Center(
                   child: Container(
@@ -80,12 +65,12 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
                           children: [
                             const Text(
                               'Category:',
-                              style: TextStyle(color: Colors.white),
                             ),
                             const SizedBox(
                               width: 20,
@@ -123,22 +108,21 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                               color: Colors.amber[900],
                               fontWeight: FontWeight.bold),
                           decoration: const InputDecoration(
-                              focusColor: Colors.amber,
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.amber),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              labelText:
-                                  'Characters, props or special instructions for the Story',
-                              hintText:
-                                  'Teddy bear, space ship, fairy tale planet...',
-                              fillColor: Colors.amber,
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.amber),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              labelStyle: TextStyle(color: Colors.white),
-                              hintStyle: TextStyle(color: Colors.grey)),
+                            focusColor: Colors.amber,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.amber),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            labelText:
+                                'Characters, props or special instructions for the Story',
+                            hintText:
+                                'Teddy bear, space ship, fairy tale planet...',
+                            fillColor: Colors.amber,
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.amber),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                          ),
                           onChanged: (value) {
                             setState(() {
                               charactersInput = value;
@@ -146,22 +130,37 @@ class CreateStoryScreenState extends State<CreateStoryScreen> {
                           },
                         ),
                         // Create Story Button
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                textStyle: MaterialStateProperty.resolveWith(
-                                    (states) => const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                backgroundColor: MaterialStateColor.resolveWith(
-                                    (states) => Colors.amber)),
-                            onPressed: () {
-                              BlocProvider.of<StoryBloc>(context).add(
-                                StoryCreateEvent(
-                                    selectedStoryType, charactersInput),
-                              );
-                            },
-                            child: const Text('Create Story'),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  textStyle: MaterialStateProperty.resolveWith(
+                                      (states) => const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith(
+                                          (states) => Colors.amber)),
+                              onPressed: () {
+                                BlocProvider.of<StoryBloc>(context).add(
+                                  StoryCreateEvent(
+                                      selectedStoryType, charactersInput),
+                                );
+                              },
+                              child: const Text('Create Story'),
+                            ),
+                          ),
+                        ),
+                        // Create Story Button
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
                           ),
                         ),
                       ],
