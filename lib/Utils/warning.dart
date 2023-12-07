@@ -13,8 +13,11 @@ class Warning extends StatelessWidget {
         color: Colors.red[100],
         child: const Padding(
           padding: EdgeInsets.all(10.0),
-          child: Text(
-            "While AI is powerful, errors may occur. Verify essential information independently.",
+          child: Center(
+            child: Text(
+              "While AI is powerful, errors may occur. Verify essential information independently.",
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ),

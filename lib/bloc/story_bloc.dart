@@ -37,16 +37,31 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
       await uploadTask.whenComplete(() async {
         var imageUrl = await ref.getDownloadURL();
 
+        String genre =
+            response.split('\n\n')[1].trim(); // Extract genre from response
+
+        // Check if the genre already exists
+        QuerySnapshot genreQuery = await firestore
+            .collection('genres')
+            .where('genre', isEqualTo: genre)
+            .limit(1)
+            .get();
+
+        // Add genre if it doesn't exist
+        if (genreQuery.docs.isEmpty) {
+          await firestore.collection('genres').add({'genre': genre});
+        }
+
         // Save story details to Firestore with the new image URL
         await firestore.collection('stories').add({
-          'storyType': event.storyType,
-          'characters': event.characters,
+          'title': response.split('\n\n').first,
+          'genre': genre,
           'storyContent': response,
           'imageUrl': imageUrl,
           'createdAt': FieldValue.serverTimestamp(), // optional: timestamp
         });
 
-        emit(StoryLoadedState(response, imageUrl)); // Send the new image URL
+        emit(StoryLoadedState(response, imageUrl, genre));
       });
     } catch (e) {
       emit(StoryErrorState());
@@ -57,9 +72,12 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
       FetchStoriesEvent event, Emitter<StoryState> emit) async {
     emit(StoryLoadingState());
     try {
-      QuerySnapshot snapshot =
+      QuerySnapshot stories =
           await FirebaseFirestore.instance.collection('stories').get();
-      emit(StoriesLoadedState(snapshot.docs));
+      QuerySnapshot genres =
+          await FirebaseFirestore.instance.collection('genres').get();
+
+      emit(StoriesLoadedState(stories.docs, genres.docs));
     } catch (e) {
       emit(StoryErrorState());
     }

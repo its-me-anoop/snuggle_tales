@@ -24,7 +24,7 @@ Future<String> getChatGPTResponse(String userMessage) async {
           {
             "role": "user",
             "content":
-                "Short bed time story less than 200 words for children. $userMessage. no index. use paragraphs. add a title, but don't use the text Title:"
+                "Short bed time story less than 200 words for children. $userMessage. no index. use paragraphs. add a title, but don't use the text Title:, add a category or genre as the second line. The story should be in this format : \n\n Title \n\n genre \n\n story"
           },
         ],
       }),

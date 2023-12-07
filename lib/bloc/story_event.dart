@@ -6,13 +6,12 @@ abstract class StoryEvent extends Equatable {
 }
 
 class StoryCreateEvent extends StoryEvent {
-  final String storyType;
   final String characters;
 
-  StoryCreateEvent(this.storyType, this.characters);
+  StoryCreateEvent(this.characters);
 
   @override
-  List<Object> get props => [storyType, characters];
+  List<Object> get props => [characters];
 }
 
 class FetchStoriesEvent extends StoryEvent {}

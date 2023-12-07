@@ -1,6 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:snuggle_tales/Utils/warning.dart';
 
 /// A widget that displays a loading animation along with animated text messages.
 class Loader extends StatelessWidget {
@@ -39,9 +38,6 @@ class Loader extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20), // Add some spacing
-
-            // Warning message
-            const Warning(),
           ],
         ),
       ),

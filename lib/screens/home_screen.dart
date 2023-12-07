@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snuggle_tales/bloc/story_bloc.dart';
-import 'package:snuggle_tales/constants/categories.dart';
 import 'package:snuggle_tales/screens/create_story_screen.dart';
 import 'package:snuggle_tales/screens/story_screen.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
@@ -22,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _verticalScrollController = ScrollController();
     _horizontalScrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<StoryBloc>().add(FetchStoriesEvent());
+    });
   }
 
   @override
@@ -59,8 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _verticalScrollController,
               child: ListView.builder(
                 controller: _verticalScrollController,
-                itemCount: categories.length,
-                itemBuilder: (context, categoryIndex) {
+                itemCount: state.genres.length,
+                itemBuilder: (context, genreIndex) {
+                  var genres =
+                      state.genres[genreIndex].data() as Map<String, dynamic>;
                   return Container(
                     decoration: const BoxDecoration(
                         gradient: LinearGradient(
@@ -78,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.only(
                               left: 20.0, top: 30, bottom: 10),
                           child: Text(
-                            categories[categoryIndex],
+                            genres['genre'],
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
@@ -101,8 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return Padding(
                                       padding: EdgeInsets.only(
                                           left: (index == 0) ? 20 : 0),
-                                      child: (data['storyType'] ==
-                                              categories[categoryIndex])
+                                      child: (data['genre'] == genres['genre'])
                                           ? GestureDetector(
                                               onTap: () {
                                                 Navigator.push(
@@ -208,6 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _openCreateStoryBottomSheet(BuildContext context) {
     showModalBottomSheet(
+      constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       clipBehavior: Clip.antiAlias,
       isDismissible: false,
@@ -216,7 +220,9 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context) {
         return BlocProvider(
           create: (context) => StoryBloc(),
-          child: const CreateStoryScreen(),
+          child: CreateStoryScreen(
+            onStoryCreated: () => Navigator.pop(context),
+          ),
         ); // Your CreateStoryScreen widget
       },
     );
